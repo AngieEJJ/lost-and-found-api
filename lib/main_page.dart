@@ -21,8 +21,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    // searchItem(""); //getData가 await으로 데이터를 가져옴 -> getData가 된 후에  result 리스트가 채워져야 필터링이 수행된다. searchItem에서 result 활용 가능.
-    // -> 여기에 넣으면 병렬진행임. -> 39번쨰 줄로 이동
     getData();
     super.initState();
   }
@@ -34,7 +32,6 @@ class _MainPageState extends State<MainPage> {
         'http://openapi.seoul.go.kr:8088/sample/json/lostArticleInfo/1/5/');
     // print(response.data['lostArticleInfo']['row'][0]['ID']);
 
-    // setState(() { // searchItem 내 setstate가 있으므로 중복 -> 불필요
       result = response.data['lostArticleInfo']['row'];
       searchItem("");
       // print(result);
@@ -63,11 +60,6 @@ class _MainPageState extends State<MainPage> {
           children: [
             TextField(
               controller: controller,
-              // 연결
-              // onChanged: (value) { //
-              //   searchItem(controller.text);
-              //   // print(controller.text);
-              // },
               decoration: InputDecoration(
                 labelText: '분실물을 입력하세요',
                 border: const OutlineInputBorder(),
