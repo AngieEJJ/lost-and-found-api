@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ijkl/data/lost_item_api.dart';
-import 'model/item.dart';
+import 'package:ijkl/screen/widget/search_bar_widget.dart';
+import '../model/item.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -24,16 +25,12 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     initData();
-    // lostItemApi.getData().then((value) { // value를 어떻게 하겠다. 28번 29번 = listItem result로 가져오기만 하고 할당이 없음. result에 value 할당.
-    //   result = value; //vlaue에 result를 넣어줌
-    //   searchItem("");
-    // });
     super.initState();
   }
 
 
   void initData() async {
-    result =  await lostItemApi.getData(); //final을 붙이면 여기서만 쓸 수 있음.
+    result =  await lostItemApi.getData();
     searchItem("");
   }
 
@@ -55,19 +52,7 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                labelText: '분실물을 입력하세요',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    searchItem(controller.text);
-                  },
-                ),
-              ),
-            ),
+            SearchBarWidget(callback: searchItem),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(

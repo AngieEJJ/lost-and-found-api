@@ -4,7 +4,7 @@ import '../model/item.dart';
 class LostItemApi {
   Future<List<Item>> getData() async {
     Dio dio = Dio();
-    List<Item> result = [];
+    List<Item> result = []; // getData 함수에서만 사용하는 변수이기 때문에 전역이 아닌 지역으로 위치시킴
 
     final response = await dio.get(
         'http://openapi.seoul.go.kr:8088/sample/json/lostArticleInfo/1/5/');
