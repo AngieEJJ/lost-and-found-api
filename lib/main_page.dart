@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:ijkl/data/lost_item_api.dart';
 import 'model/item.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,6 +13,7 @@ class _MainPageState extends State<MainPage> {
   List <Item>result = [];
   List <Item>filterdResult = [];
   final TextEditingController controller = TextEditingController();
+  final LostItemApi lostItemApi = LostItemApi();
 
   @override
   void dispose() {
@@ -22,29 +23,25 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    getData();
+    initData();
+    // lostItemApi.getData().then((value) { // value를 어떻게 하겠다. 28번 29번 = listItem result로 가져오기만 하고 할당이 없음. result에 value 할당.
+    //   result = value; //vlaue에 result를 넣어줌
+    //   searchItem("");
+    // });
     super.initState();
   }
 
-  Dio dio = Dio();
 
-  Future getData() async {
-    final response = await dio.get(
-        'http://openapi.seoul.go.kr:8088/sample/json/lostArticleInfo/1/5/');
-
-List rawData = response.data['lostArticleInfo']['row']; //  result = response.data['lostArticleInfo']['row'];
-    result = rawData.map((e) => Item.fromJson(e)).toList();
-      searchItem("");
+  void initData() async {
+    result =  await lostItemApi.getData(); //final을 붙이면 여기서만 쓸 수 있음.
+    searchItem("");
   }
-
-
 
   void searchItem(String query) {
     setState(() {
       filterdResult = result
-          .where((e) => e.name.contains(query)) //e['GET_NAME'].toString().contains(query))
+          .where((e) => e.name.contains(query))
           .toList();
-      //e['GET_NAME'].toString()을 통해 Map에서 'GET_NAME' 키에 해당하는 값을 문자열로 변환/ Item 모델에서 name은 이미 문자열 타입
     });
   }
 
