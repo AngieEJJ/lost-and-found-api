@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'model/item.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -9,8 +10,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List result = [];
-  List filterdResult = [];
+  List <Item>result = [];
+  List <Item>filterdResult = [];
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -30,21 +31,20 @@ class _MainPageState extends State<MainPage> {
   Future getData() async {
     final response = await dio.get(
         'http://openapi.seoul.go.kr:8088/sample/json/lostArticleInfo/1/5/');
-    // print(response.data['lostArticleInfo']['row'][0]['ID']);
 
-      result = response.data['lostArticleInfo']['row'];
+List rawData = response.data['lostArticleInfo']['row']; //  result = response.data['lostArticleInfo']['row'];
+    result = rawData.map((e) => Item.fromJson(e)).toList();
       searchItem("");
-      // print(result);
-      // print(result[0]);
-      // print(result.length);
-    // });
   }
+
+
 
   void searchItem(String query) {
     setState(() {
       filterdResult = result
-          .where((item) => item['GET_NAME'].toString().contains(query))
+          .where((e) => e.name.contains(query)) //e['GET_NAME'].toString().contains(query))
           .toList();
+      //e['GET_NAME'].toString()을 통해 Map에서 'GET_NAME' 키에 해당하는 값을 문자열로 변환/ Item 모델에서 name은 이미 문자열 타입
     });
   }
 
@@ -87,19 +87,19 @@ class _MainPageState extends State<MainPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '분실물: ${filterdResult[index]['GET_NAME']}',
+                                '분실물: ${filterdResult[index].name}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '상태: ${filterdResult[index]['STATUS']}',
+                                '상태: ${filterdResult[index].status}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령일자: ${filterdResult[index]['GET_DATE']}',
+                                '수령일자: ${filterdResult[index].date}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령장소: ${filterdResult[index]['TAKE_PLACE']}',
+                                '수령장소: ${filterdResult[index].place}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
