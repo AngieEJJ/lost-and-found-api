@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ijkl/data/lost_item_api.dart';
-import 'package:ijkl/screen/widget/search_bar_widget.dart';
-import '../model/item.dart';
+import 'package:ijkl/model/item.dart';
+import 'package:ijkl/model/item_repository.dart';
+import 'widget/search_bar_widget.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,9 +13,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   List <Item>result = [];
-  List <Item>filterdResult = [];
+
   final TextEditingController controller = TextEditingController();
   final LostItemApi lostItemApi = LostItemApi();
+  ItemRepository itemRepository = ItemRepository();
 
   @override
   void dispose() {
@@ -28,22 +30,17 @@ class _MainPageState extends State<MainPage> {
     super.initState();
   }
 
-
   void initData() async {
-    result =  await lostItemApi.getData();
-    searchItem("");
+    await itemRepository.searchItem(""); //search함수는 퓨처니까 await 필요 // ""가 들어가면 빈값으로 초기화 시킴
+  setState(() {
+
+  });
   }
 
-  void searchItem(String query) {
-    setState(() {
-      filterdResult = result
-          .where((e) => e.name.contains(query))
-          .toList();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('분실물 찾기'),
@@ -52,13 +49,13 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SearchBarWidget(callback: searchItem),
+            SearchBarWidget(onSearch: itemRepository.searchItem),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                  itemCount: filterdResult.length,
+                  itemCount: itemRepository.filterdResult.length,
                   itemBuilder: (context, index) {
-                    // print('분실물: ${result[index]}');
+                    print(itemRepository.filterdResult.length);
                     return Card(
                       child: Container(
                         height: 280,
@@ -69,19 +66,19 @@ class _MainPageState extends State<MainPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '분실물: ${filterdResult[index].name}',
+                                '분실물: ${itemRepository.filterdResult[index].name}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '상태: ${filterdResult[index].status}',
+                                '상태: ${itemRepository.filterdResult[index].status}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령일자: ${filterdResult[index].date}',
+                                '수령일자: ${itemRepository.filterdResult[index].date}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령장소: ${filterdResult[index].place}',
+                                '수령장소: ${itemRepository.filterdResult[index].place}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
