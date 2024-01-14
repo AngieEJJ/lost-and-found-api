@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ijkl/data/lost_item_api.dart';
-import 'package:ijkl/model/item.dart';
 import 'package:ijkl/model/item_repository.dart';
+import 'package:ijkl/ui/main_view_model.dart';
 import 'widget/search_bar_widget.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,11 +11,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List <Item>result = [];
-
   final TextEditingController controller = TextEditingController();
-  final LostItemApi lostItemApi = LostItemApi();
-  ItemRepository itemRepository = ItemRepository();
+  final ItemRepository itemRepository = ItemRepository();
+  final viewModel = MainViewModel();
 
   @override
   void dispose() {
@@ -26,21 +23,13 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    initData();
+    viewModel.initData("");
     super.initState();
-  }
-
-  void initData() async {
-    await itemRepository.searchItem(""); //search함수는 퓨처니까 await 필요 // ""가 들어가면 빈값으로 초기화 시킴
-  setState(() {
-
-  });
   }
 
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('분실물 찾기'),
@@ -55,7 +44,6 @@ class _MainPageState extends State<MainPage> {
               child: ListView.builder(
                   itemCount: itemRepository.filterdResult.length,
                   itemBuilder: (context, index) {
-                    print(itemRepository.filterdResult.length);
                     return Card(
                       child: Container(
                         height: 280,
