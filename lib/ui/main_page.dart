@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ijkl/model/item_repository.dart';
+import 'package:ijkl/data/repository/item_repository_impl.dart';
 import 'package:ijkl/ui/main_view_model.dart';
 import 'widget/search_bar_widget.dart';
 
@@ -12,7 +12,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final TextEditingController controller = TextEditingController();
-  final ItemRepository itemRepository = ItemRepository();
+  final ItemRepositoryImpl itemRepository = ItemRepositoryImpl();
+
   final viewModel = MainViewModel();
 
   @override
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    viewModel.initData("");
+itemRepository.getItemData("");
     super.initState();
   }
 
@@ -38,11 +39,11 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SearchBarWidget(onSearch: itemRepository.searchItem),
+            SearchBarWidget(onSearch: itemRepository.getItemData),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                  itemCount: itemRepository.filterdResult.length,
+                  itemCount: viewModel.filterdResult.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: Container(
@@ -54,19 +55,19 @@ class _MainPageState extends State<MainPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '분실물: ${itemRepository.filterdResult[index].name}',
+                                '분실물: ${viewModel.filterdResult[index].name}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '상태: ${itemRepository.filterdResult[index].status}',
+                                '상태: ${viewModel.filterdResult[index].status}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령일자: ${itemRepository.filterdResult[index].date}',
+                                '수령일자: ${viewModel.filterdResult[index].date}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               Text(
-                                '수령장소: ${itemRepository.filterdResult[index].place}',
+                                '수령장소: ${viewModel.filterdResult[index].place}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],

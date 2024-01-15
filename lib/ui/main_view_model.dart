@@ -1,17 +1,17 @@
-import '../model/item.dart';
-import '../model/item_repository.dart';
+import 'package:ijkl/data/repository/item_repository_impl.dart';
+import '../data/model/item.dart';
 
 class MainViewModel {
-  final ItemRepository itemRepository = ItemRepository();
-  List<Item> result = [];
-  List<Item> initialData = [];
+ final repository = ItemRepositoryImpl();
+  List<Item> filterdResult = [];
 
-  Future<List<Item>> initData(String query) async {
-  result = await itemRepository.searchItem("");
-  initialData = result.where((e) => e.name.contains(query)).toList();
-  // print(initialData);
-  return initialData;
+  @override
+  Future<List<Item>> filterData(String query) async {
+    final itemList = await repository.getItemData(query);
 
+    filterdResult =
+        itemList.where((item) => item.name.contains(query)).toList();
 
+    return filterdResult;
   }
 }

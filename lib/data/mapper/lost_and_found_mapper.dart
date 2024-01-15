@@ -1,4 +1,4 @@
-import '../data/dto/lost_and_found_dto.dart';
+import '../dto/lost_and_found_dto.dart';
 import '../model/item.dart';
 
 extension DtoModel on Row {
