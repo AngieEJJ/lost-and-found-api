@@ -19,11 +19,4 @@ class Item { //팩토리 메서드를 안 쓸 경우 ?를 안 하면 에러가 �
       place: json['GET_POSITION'] as String,
     );
   }
-
-  // Item.fromJson(Map<String, dynamic> json) { //객체를 만듦 = 생성자
-  //   name = json['GET_NAME'];
-  //   status = json['STATUS'];
-  //   date = json['GET_DATE'];
-  //   place = json['GET_POSITION'];
-  // }
 }
